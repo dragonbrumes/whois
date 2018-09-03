@@ -1,9 +1,11 @@
 import React from "react";
 import axios from "axios";
-import { Button, Form, Transition } from 'semantic-ui-react'
+import { Button, Form, Icon, Transition } from 'semantic-ui-react'
 
 import Result from '../components/Result/Result'
 import Loader from '../components/Loader/Loader'
+
+import './domain.styl'
 
 export default class Domain extends React.Component {
 
@@ -110,19 +112,25 @@ export default class Domain extends React.Component {
     const { domain, result, isLoading } = this.state
     console.log(result)
     return (
-      <div className="container">
-        <h2>Whois Whois Net</h2>
-        <h3>Get your domain name</h3>
-        <div className="form">
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Field>
-              <label>Find a domain name</label>
-              <input type="text" name="domain" value={this.state.value} onChange={this.handleChange} placeholder="e.g. : yourdomain.com" />
-            </Form.Field>
-            <Button primary type="submit" value="Submit">Check Domain Availability</Button>
-          </Form>
+      <div className="home">
+        <div className="home-title">
+          <h2>Whois Whois Net</h2>
         </div>
-        {result !== undefined && <Result domain={domain} searchResult={result} />}
+        <div className="home-slogan">
+          <h1>Search and get your domain name</h1>
+        </div>
+        <div className="form">
+          <div className="form-container">
+            <Form onSubmit={this.handleSubmit}>
+              <Form.Field>
+                <label>Find a domain name</label>
+                <input type="text" name="domain" value={this.state.value} onChange={this.handleChange} placeholder="e.g. : yourdomain.com" />
+              </Form.Field>
+              <Button color='green' icon labelPosition='left' type="submit" value="Submit"><Icon name='search' />Check Domain Availability</Button>
+            </Form>
+          </div>
+        </div>
+        {result !== undefined && <Transition animation='fade' duration={1500}><Result domain={domain} searchResult={result} /></Transition>}
       </div>
     )
   }
