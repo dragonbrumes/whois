@@ -1,8 +1,6 @@
 import React from "react";
 import axios from "axios";
-import Server from "./../utils/server";
-import unirest from "unirest";
-// import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
+import { Button, Form, Transition } from 'semantic-ui-react'
 
 import Result from '../components/Result/Result'
 import Loader from '../components/Loader/Loader'
@@ -104,7 +102,6 @@ export default class Domain extends React.Component {
     axios.get(`${URL}${this.state.domain}`)
       .then(res => {
         this.setState({ result: res.data.is_available })
-        // const { is_available } = res.data
 
       })
   }
@@ -114,20 +111,18 @@ export default class Domain extends React.Component {
     console.log(result)
     return (
       <div className="container">
+        <h2>Whois Whois Net</h2>
+        <h3>Get your domain name</h3>
         <div className="form">
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Enter your domain name:
-          <input type="text" name="domain" value={this.state.value} onChange={this.handleChange} placeholder="yourdomain.com" />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Field>
+              <label>Find a domain name</label>
+              <input type="text" name="domain" value={this.state.value} onChange={this.handleChange} placeholder="e.g. : yourdomain.com" />
+            </Form.Field>
+            <Button primary type="submit" value="Submit">Check Domain Availability</Button>
+          </Form>
         </div>
         {result !== undefined && <Result domain={domain} searchResult={result} />}
-        {/* {result === false ? <div>Indisponible</div> : <div>Disponible</div>}
-        {result === true || false ? result : domain}
-        {result === false && "`<div>${result}</div>`"}
-        {result} */}
       </div>
     )
   }
