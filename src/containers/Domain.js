@@ -13,6 +13,7 @@ export default class Domain extends React.Component {
   state = ({
     domain: "",
     result: undefined,
+    resultShowed: false,
     isLoading: false,
   })
 
@@ -95,7 +96,10 @@ export default class Domain extends React.Component {
   } //didmount
 
   handleChange = (event) => {
-    this.setState({ domain: event.target.value })
+    this.setState({
+      domain: event.target.value,
+      resultShowed: false
+    })
   }
 
   handleSubmit = (event) => {
@@ -103,13 +107,15 @@ export default class Domain extends React.Component {
     const URL = "https://api.jsonwhois.io/availability?key=oBLWSTUX5rRKdkspDaIynbCjoTYU0AjQ&domain="
     axios.get(`${URL}${this.state.domain}`)
       .then(res => {
-        this.setState({ result: res.data.is_available })
-
+        this.setState({
+          result: res.data.is_available,
+          resultShowed: true
+        })
       })
   }
 
   render() {
-    const { domain, result, isLoading } = this.state
+    const { domain, result, resultShowed } = this.state
     console.log(result)
     return (
       <div className="home">
@@ -130,7 +136,7 @@ export default class Domain extends React.Component {
             </Form>
           </div>
         </div>
-        {result !== undefined && <Transition animation='fade' duration={1500}><Result domain={domain} searchResult={result} /></Transition>}
+        {result !== undefined && resultShowed !== false && <Transition.Group animation='fade up' duration={1500}><Result domain={domain} searchResult={result} /></Transition.Group>}
       </div>
     )
   }
