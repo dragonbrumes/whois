@@ -1,24 +1,23 @@
-import React from "react";
-import axios from "axios";
-import { Button, Form, Icon, Transition } from 'semantic-ui-react'
+import React from 'react';
+import axios from 'axios';
+import { Button, Form, Icon, Transition } from 'semantic-ui-react';
+import ReactGA from 'react-ga';
 
-import Result from '../components/Result/Result'
-import Loader from '../components/Loader/Loader'
+import Result from '../components/Result/Result';
+import Loader from '../components/Loader/Loader';
 
-import './domain.styl'
+import './domain.styl';
 
 export default class Domain extends React.Component {
-
-
-  state = ({
-    domain: "",
+  state = {
+    domain: '',
     result: undefined,
     resultShowed: false,
-    isLoading: false,
-  })
-
+    isLoading: false
+  };
 
   componentDidMount() {
+    this.initializeReactGA();
     // this.server = new Server();
 
     /*****************/
@@ -95,28 +94,33 @@ export default class Domain extends React.Component {
     //   });
   } //didmount
 
-  handleChange = (event) => {
+  initializeReactGA = () => {
+    ReactGA.initialize('UA-137090-3');
+    ReactGA.pageview('/homepage');
+  };
+
+  handleChange = event => {
     this.setState({
       domain: event.target.value,
       resultShowed: false
-    })
-  }
+    });
+  };
 
-  handleSubmit = (event) => {
-    event.preventDefault()
-    const URL = "https://api.jsonwhois.io/availability?key=oBLWSTUX5rRKdkspDaIynbCjoTYU0AjQ&domain="
-    axios.get(`${URL}${this.state.domain}`)
-      .then(res => {
-        this.setState({
-          result: res.data.is_available,
-          resultShowed: true
-        })
-      })
-  }
+  handleSubmit = event => {
+    event.preventDefault();
+    const URL =
+      'https://api.jsonwhois.io/availability?key=oBLWSTUX5rRKdkspDaIynbCjoTYU0AjQ&domain=';
+    axios.get(`${URL}${this.state.domain}`).then(res => {
+      this.setState({
+        result: res.data.is_available,
+        resultShowed: true
+      });
+    });
+  };
 
   render() {
-    const { domain, result, resultShowed } = this.state
-    console.log(result)
+    const { domain, result, resultShowed } = this.state;
+    console.log(result);
     return (
       <div className="home">
         <div className="home-title">
@@ -130,14 +134,33 @@ export default class Domain extends React.Component {
             <Form onSubmit={this.handleSubmit}>
               <Form.Field>
                 <label>Find a domain name</label>
-                <input type="text" name="domain" value={this.state.value} onChange={this.handleChange} placeholder="e.g. : yourdomain.com" />
+                <input
+                  type="text"
+                  name="domain"
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                  placeholder="e.g. : yourdomain.com"
+                />
               </Form.Field>
-              <Button color='green' icon labelPosition='left' type="submit" value="Submit"><Icon name='search' />Check Domain Availability</Button>
+              <Button
+                color="green"
+                icon
+                labelPosition="left"
+                type="submit"
+                value="Submit">
+                <Icon name="search" />
+                Check Domain Availability
+              </Button>
             </Form>
           </div>
         </div>
-        {result !== undefined && resultShowed !== false && <Transition.Group animation='fade up' duration={1500}><Result domain={domain} searchResult={result} /></Transition.Group>}
+        {result !== undefined &&
+          resultShowed !== false && (
+            <Transition.Group animation="fade up" duration={1500}>
+              <Result domain={domain} searchResult={result} />
+            </Transition.Group>
+          )}
       </div>
-    )
+    );
   }
 }
